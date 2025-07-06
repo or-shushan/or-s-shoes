@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>דשבורדים עם Tableau</title>
+  <script type="module" src="https://public.tableau.com/javascripts/api/tableau.embedding.3.latest.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+    tableau-viz {
+      width: 100%;
+      min-height: 80vh;
+    }
+    .active-btn {
+      background-color: #2563eb !important;
+      color: white !important;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 flex flex-col min-h-screen">
+
+  <header class="text-center p-6 bg-white shadow-md">
+    <h2 class="text-3xl font-bold">דשבורד מכירות אדידס</h2>
+    <div class="flex flex-wrap gap-4 justify-center mt-4">
+      <button class="btn px-6 py-3 bg-gray-400 rounded-2xl shadow hover:bg-gray-500 active-btn" onclick="changeDashboard(1, this)">דשבורד 1</button>
+      <button class="btn px-6 py-3 bg-gray-400 rounded-2xl shadow hover:bg-gray-500" onclick="changeDashboard(2, this)">דשבורד 2</button>
+      <button class="btn px-6 py-3 bg-gray-400 rounded-2xl shadow hover:bg-gray-500" onclick="changeDashboard(3, this)">דשבורד 3</button>
+    </div>
+  </header>
+
+  <main class="flex-grow">
+    <tableau-viz
+      id="tableauViz"
+      src="https://public.tableau.com/views/Book1_17453440146100/Dashboard1?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link"
+      toolbar="bottom"
+      hide-tabs>
+    </tableau-viz>
+  </main>
+
+  <script>
+    const dashboards = {
+      1: "https://public.tableau.com/views/Book1_17453440146100/Dashboard1?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link",
+      2: "https://public.tableau.com/views/Book2_17453440360510/Dashboard2?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link",
+      3: "https://public.tableau.com/views/Book3_17453440549220/Dashboard3?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link"
+    };
+
+    function changeDashboard(number, button) {
+      const viz = document.getElementById("tableauViz");
+      viz.src = dashboards[number];
+
+      document.querySelectorAll(".btn").forEach(btn => btn.classList.remove("active-btn"));
+      button.classList.add("active-btn");
+    }
+  </script>
+
+</body>
+</html>
