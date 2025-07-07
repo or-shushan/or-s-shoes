@@ -1,62 +1,128 @@
+<?php include 'components/header.php'; ?>
+
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>דשבורדים עם Tableau</title>
-  <script type="module" src="https://public.tableau.com/javascripts/api/tableau.embedding.3.latest.min.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>דוחות מנהל - Scissors</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin-reports.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
+    .dashboard-section {
+      display: none;
+      height: 100vh;
+      margin-bottom: 40px;
     }
-    tableau-viz {
+
+    .dashboard-title {
+      font-size: 1.4rem;
+      text-align: center;
+      margin: 20px 0 10px;
+      color: #333;
+    }
+
+    .tableauContainer {
       width: 100%;
-      min-height: 80vh;
+      height: 90vh;
     }
-    .active-btn {
-      background-color: #2563eb !important;
-      color: white !important;
+
+    #dashboard-select {
+      display: block;
+      margin: 40px auto 20px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
     }
   </style>
+  <script src="https://public.tableau.com/javascripts/api/tableau-2.min.js"></script>
 </head>
-<body class="bg-gray-100 flex flex-col min-h-screen">
+<body>
 
-  <header class="text-center p-6 bg-white shadow-md">
-    <h2 class="text-3xl font-bold">דשבורד מכירות אדידס</h2>
-    <div class="flex flex-wrap gap-4 justify-center mt-4">
-      <button class="btn px-6 py-3 bg-gray-400 rounded-2xl shadow hover:bg-gray-500 active-btn" onclick="changeDashboard(1, this)">דשבורד 1</button>
-      <button class="btn px-6 py-3 bg-gray-400 rounded-2xl shadow hover:bg-gray-500" onclick="changeDashboard(2, this)">דשבורד 2</button>
-      <button class="btn px-6 py-3 bg-gray-400 rounded-2xl shadow hover:bg-gray-500" onclick="changeDashboard(3, this)">דשבורד 3</button>
+<section class="profile-container" id="profile">
+  <div class="container">
+    <header class="reports-header">
+      <h1>דשבורדים לניהול העסק</h1>
+      <select id="dashboard-select">
+        <option value="" selected disabled>בחר דשבורד להצגה</option>
+        <option value="all">הצג את כולם</option>
+        <option value="dashboard1">דשבורד 1 - ביצועים חודשיים</option>
+        <option value="dashboard2">דשבורד 2 - זמינות תורים</option>
+        <option value="dashboard3">דשבורד 3 - ניתוח הכנסות</option>
+      </select>
+      <div id="logo-placeholder" style="text-align: center; margin-top: 40px; font-size: 20rem; color: #aaa;">
+  <i class="fas fa-chart-pie"></i>
+</div>
+    </header>
+
+    <!-- דשבורד 1 -->
+    <div class="dashboard-section" id="dashboard1">
+      <h2 class="dashboard-title">דשבורד 1 - ביצועים חודשיים</h2>
+      <div class="tableauContainer" id="container1" data-url="https://public.tableau.com/views/-Finalprojects_17502749126040/sheet11"></div>
     </div>
-  </header>
 
-  <main class="flex-grow">
-    <tableau-viz
-      id="tableauViz"
-      src="https://public.tableau.com/views/Book1_17453440146100/Dashboard1?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link"
-      toolbar="bottom"
-      hide-tabs>
-    </tableau-viz>
-  </main>
+    <!-- דשבורד 2 -->
+    <div class="dashboard-section" id="dashboard2">
+      <h2 class="dashboard-title">דשבורד 2 - זמינות תורים</h2>
+      <div class="tableauContainer" id="container2" data-url="https://public.tableau.com/views/-Finalprojects_17502639015620/sheet7"></div>
+    </div>
 
-  <script>
-    const dashboards = {
-      1: "https://public.tableau.com/views/Book1_17453440146100/Dashboard1?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link",
-      2: "https://public.tableau.com/views/Book2_17453440360510/Dashboard2?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link",
-      3: "https://public.tableau.com/views/Book3_17453440549220/Dashboard3?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link"
-    };
+    <!-- דשבורד 3 -->
+    <div class="dashboard-section" id="dashboard3">
+      <h2 class="dashboard-title">דשבורד 3 - ניתוח הכנסות</h2>
+      <div class="tableauContainer" id="container3" data-url="https://public.tableau.com/views/-Finalprojects/sheet3"></div>
+    </div>
+  </div>
+</section>
 
-    function changeDashboard(number, button) {
-      const viz = document.getElementById("tableauViz");
-      viz.src = dashboards[number];
+<script>
+  const select = document.getElementById('dashboard-select');
+  const loaded = {};
 
-      document.querySelectorAll(".btn").forEach(btn => btn.classList.remove("active-btn"));
-      button.classList.add("active-btn");
+  select.addEventListener('change', function () {
+    const selected = this.value;
+
+    // הסתר את כולם
+    document.querySelectorAll('.dashboard-section').forEach(section => {
+      section.style.display = 'none';
+    });
+
+    // אם נבחר 'הצג את כולם'
+    if (selected === 'all') {
+      ['dashboard1', 'dashboard2', 'dashboard3'].forEach(id => {
+        const section = document.getElementById(id);
+        section.style.display = 'block';
+        loadViz(section);
+      });
+    } else {
+      const section = document.getElementById(selected);
+      section.style.display = 'block';
+      loadViz(section);
     }
-  </script>
+  });
+
+  function loadViz(section) {
+    const container = section.querySelector('.tableauContainer');
+    const url = container.getAttribute('data-url');
+
+    if (!loaded[container.id]) {
+      new tableau.Viz(container, url, {
+        width: '100%',
+        height: '90vh',
+        hideTabs: true,
+        hideToolbar: false
+      });
+      loaded[container.id] = true;
+    }
+  }
+</script>
+<script>
+  document.getElementById('dashboard-select').addEventListener('change', function () {
+    document.getElementById('logo-placeholder').style.display = 'none';
+  });
+</script>
 
 </body>
 </html>
