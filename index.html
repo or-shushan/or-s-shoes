@@ -1,126 +1,97 @@
-
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8">
+  <title>דשבורד Tableau - ניתוח נתונים</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>דוחות מנהל - Scissors</title>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/admin-reports.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
-    .dashboard-section {
-      display: none;
-      height: 100vh;
-      margin-bottom: 40px;
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f8f8;
+      margin: 0;
+      padding: 0;
     }
 
-    .dashboard-title {
-      font-size: 1.4rem;
+    header {
+      background-color: #343a40;
+      color: white;
+      padding: 20px;
       text-align: center;
-      margin: 20px 0 10px;
-      color: #333;
+      font-size: 1.8rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
-    .tableauContainer {
+    .content {
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .tableauPlaceholder {
       width: 100%;
-      height: 90vh;
-    }
-
-    #dashboard-select {
-      display: block;
-      margin: 40px auto 20px;
-      padding: 10px 20px;
-      font-size: 1rem;
-      border-radius: 5px;
+      max-width: 1200px;
+      margin: auto;
       border: 1px solid #ccc;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      border-radius: 10px;
+      overflow: hidden;
+      background-color: white;
     }
   </style>
-  <script src="https://public.tableau.com/javascripts/api/tableau-2.min.js"></script>
 </head>
 <body>
 
-<section class="profile-container" id="profile">
-  <div class="container">
-    <header class="reports-header">
-      <h1>דשבורדים לניהול העסק</h1>
-      <select id="dashboard-select">
-        <option value="" selected disabled>בחר דשבורד להצגה</option>
-        <option value="all">הצג את כולם</option>
-        <option value="dashboard1">דשבורד 1 - ביצועים חודשיים</option>
-        <option value="dashboard2">דשבורד 2 - זמינות תורים</option>
-        <option value="dashboard3">דשבורד 3 - ניתוח הכנסות</option>
-      </select>
-      <div id="logo-placeholder" style="text-align: center; margin-top: 40px; font-size: 20rem; color: #aaa;">
-  <i class="fas fa-chart-pie"></i>
-</div>
-    </header>
+<header>
+  דשבורד ניתוח ביצועים - Tableau
+</header>
 
-    <!-- דשבורד 1 -->
-    <div class="dashboard-section" id="dashboard1">
-      <h2 class="dashboard-title">דשבורד 1 - ביצועים חודשיים</h2>
-      <div class="tableauContainer" id="container1" data-url="https://public.tableau.com/views/-Finalprojects_17502749126040/sheet11"></div>
-    </div>
-
-    <!-- דשבורד 2 -->
-    <div class="dashboard-section" id="dashboard2">
-      <h2 class="dashboard-title">דשבורד 2 - זמינות תורים</h2>
-      <div class="tableauContainer" id="container2" data-url="https://public.tableau.com/views/-Finalprojects_17502639015620/sheet7"></div>
-    </div>
-
-    <!-- דשבורד 3 -->
-    <div class="dashboard-section" id="dashboard3">
-      <h2 class="dashboard-title">דשבורד 3 - ניתוח הכנסות</h2>
-      <div class="tableauContainer" id="container3" data-url="https://public.tableau.com/views/-Finalprojects/sheet3"></div>
-    </div>
+<div class="content">
+  <div class='tableauPlaceholder' id='viz1751813491129' style='position: relative'>
+    <noscript>
+      <a href='#'>
+        <img alt='Dashboard 1' src='https://public.tableau.com/static/images/sh/shoes_tableau_or_shushan/Dashboard1/1_rss.png' style='border: none' />
+      </a>
+    </noscript>
+    <object class='tableauViz' style='display:none;'>
+      <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
+      <param name='embed_code_version' value='3' />
+      <param name='site_root' value='' />
+      <param name='name' value='shoes_tableau_or_shushan&#47;Dashboard1' />
+      <param name='tabs' value='no' />
+      <param name='toolbar' value='yes' />
+      <param name='static_image' value='https://public.tableau.com/static/images/sh/shoes_tableau_or_shushan/Dashboard1/1.png' />
+      <param name='animate_transition' value='yes' />
+      <param name='display_static_image' value='yes' />
+      <param name='display_spinner' value='yes' />
+      <param name='display_overlay' value='yes' />
+      <param name='display_count' value='yes' />
+      <param name='language' value='en-US' />
+    </object>
   </div>
-</section>
+</div>
 
-<script>
-  const select = document.getElementById('dashboard-select');
-  const loaded = {};
-
-  select.addEventListener('change', function () {
-    const selected = this.value;
-
-    // הסתר את כולם
-    document.querySelectorAll('.dashboard-section').forEach(section => {
-      section.style.display = 'none';
-    });
-
-    // אם נבחר 'הצג את כולם'
-    if (selected === 'all') {
-      ['dashboard1', 'dashboard2', 'dashboard3'].forEach(id => {
-        const section = document.getElementById(id);
-        section.style.display = 'block';
-        loadViz(section);
-      });
-    } else {
-      const section = document.getElementById(selected);
-      section.style.display = 'block';
-      loadViz(section);
-    }
-  });
-
-  function loadViz(section) {
-    const container = section.querySelector('.tableauContainer');
-    const url = container.getAttribute('data-url');
-
-    if (!loaded[container.id]) {
-      new tableau.Viz(container, url, {
-        width: '100%',
-        height: '90vh',
-        hideTabs: true,
-        hideToolbar: false
-      });
-      loaded[container.id] = true;
-    }
+<script type='text/javascript'>
+  var divElement = document.getElementById('viz1751813491129');
+  var vizElement = divElement.getElementsByTagName('object')[0];
+  if (divElement.offsetWidth > 800) {
+    vizElement.style.width = '100%';
+    vizElement.style.maxWidth = '1350px';
+    vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';
+    vizElement.style.maxHeight = '887px';
+  } else if (divElement.offsetWidth > 500) {
+    vizElement.style.width = '100%';
+    vizElement.style.maxWidth = '1350px';
+    vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';
+    vizElement.style.maxHeight = '887px';
+  } else {
+    vizElement.style.width = '100%';
+    vizElement.style.height = '1327px';
   }
-</script>
-<script>
-  document.getElementById('dashboard-select').addEventListener('change', function () {
-    document.getElementById('logo-placeholder').style.display = 'none';
-  });
+  var scriptElement = document.createElement('script');
+  scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+  vizElement.parentNode.insertBefore(scriptElement, vizElement);
 </script>
 
 </body>
